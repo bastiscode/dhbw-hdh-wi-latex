@@ -1,0 +1,203 @@
+% ------------------------------------------------------------------------------
+% 	Dokumentenklasse
+% ------------------------------------------------------------------------------
+
+% Dokumentenklasse: scrreport (KoMa Script Dokumente sind für deutsche Dokumente optimiert)
+% Dokumentenklasse Optionen: 
+%	12pt 			--> 12pt Schriftgröße
+%	a4paper 		--> DINA4 Papierformat
+%	parskip 		--> Absätze mit Freizeilen statt Einzügen kennzeichnen
+%	listof=totoc 	--> Abbildungs- und Tabellenverzeichnis in Inhaltsverzeichnis aufnehmen
+%	bitotoc			--> Literaturverzeichnis in Inhaltsverzeichnis aufnehmen
+\documentclass[12pt, a4paper, parskip, listof=totoc, bibtotoc]{scrreprt}
+
+% ------------------------------------------------------------------------------
+%	Wichtige Pakete
+% ------------------------------------------------------------------------------
+
+% geometry 	--> Seitenränder einstellen
+\usepackage[left=3cm, right=3cm, top=2cm, bottom=2cm, includehead=true, includefoot=true]{geometry}
+
+% setspace	--> Zeilenabstand auf eineinhalb setzen
+\usepackage[onehalfspacing]{setspace}
+
+% inputenc 	-->	direkte Eingabe von Umlauten mit [utf8]
+\usepackage[utf8]{inputenc}
+
+% fontenc	--> Darstellung von Umlauten mit [T1] 
+\usepackage[T1]{fontenc}
+
+% babel 	--> Neue deutsche Rechtschreibung mit [ngerman]
+\usepackage[ngerman]{babel}
+
+% amsmath 	--> Erweiterung für Latex-Mathe
+\usepackage{amsmath}
+
+% amssymb 	--> Zusätzliche Mathesymbole
+\usepackage{amssymb}
+
+% graphicx 	--> Bilder einbinden
+\usepackage{graphicx}
+
+% url 		--> URLs einfügen
+\usepackage{url}
+
+% pdfpages 	--> Einbinden von externen PDFs
+\usepackage{pdfpages}
+
+% hyperref 	--> PDF Verlinkungen im Inhaltsverzeichnis
+\usepackage{hyperref}
+
+% acronym 	--> Abkürzungsverzeichnis
+\usepackage{acronym}
+
+% caption 	--> Bildunterschriften
+\usepackage{caption}
+\usepackage{subcaption}
+
+% tabularx 	--> Verbesserte Tabellen
+\usepackage{tabularx}
+
+% booktabs 	--> Schönere Tabellen
+\usepackage{booktabs}
+
+% fancyhdr 	--> Schöne Kopf- und Fußzeilen
+\usepackage{fancyhdr}
+
+% pgffor 	--> Foreach-Loops
+\usepackage{pgffor}
+
+% float 	--> Positionierung
+\usepackage{float}
+
+% blindtext	--> Blindtext generieren
+\usepackage{blindtext}
+
+% ------------------------------------------------------------------------------
+%	Kopf- und Fußzeile konfigurieren
+% ------------------------------------------------------------------------------
+
+\pagestyle{fancy}
+
+\lhead{\textsc{\rightmark}}
+\chead{}
+\rhead{\textsc{\leftmark}}
+
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+% ------------------------------------------------------------------------------
+%	Allgemeine Informationen (Ändern!!!)
+% ------------------------------------------------------------------------------
+
+\def\arbeitstyp{Bachelorarbeit}
+
+\def\titel{Hier könnte Ihr Titel stehen}
+
+\def\autor{Max Mustermann}
+\def\strasse{Musterstraße}
+\def\hausnummer{1}
+\def\plz{12345}
+\def\ort{Musterort}
+
+\def\gutachter{Dr. Maria Musterfrau}
+
+\def\ausbildungsbetrieb{Musterfirma GmbH}
+\def\ausbildungsplz{12345}
+\def\ausbildungsort{Musterort}
+
+\def\semester{2999/6}
+
+\def\abgabedatum{31.12.2999}
+
+\def\betrieblicherbetreuer{Franz Kanz}
+
+\def\wortanzahl{15.000}
+
+% ------------------------------------------------------------------------------
+%	Zusätzliche Konfiguration (Ändern!!!)
+% ------------------------------------------------------------------------------
+% Will man die folgenden Komponenten in seiner Arbeit haben oder nicht, bitte den entsprechenden Wert auf true oder false setzen.
+
+% Sperrvermerk
+\newif\ifsperrvermerk
+\setboolean{sperrvermerk}{true}
+
+% Vorwort
+\newif\ifvorwort
+\setboolean{vorwort}{true}
+
+% Abkürzungsverzeichnis
+\newif\ifabkuerzungsverzeichnis
+\setboolean{abkuerzungsverzeichnis}{true}
+
+% Gleichgeschlechtlichkeitsdisclaimer unter dem Inhaltsverzeichnis
+\newif\ifgleichgeschlechtlichkeitsdisclaimer
+\setboolean{gleichgeschlechtlichkeitsdisclaimer}{true}
+
+% Logos auf Titelblatt
+\newif\iflogosauftitelblatt
+\setboolean{logosauftitelblatt}{false}
+
+% ------------------------------------------------------------------------------
+%	Beginn des Dokuments
+% ------------------------------------------------------------------------------
+
+\begin{document}
+	
+%	Titelblatt
+	\include{./standardkomponenten/titelblatt}
+	
+%	Römische Seitenzahlen
+	\pagenumbering{Roman}
+	
+%	Sperrvermerk
+	\ifsperrvermerk \include{./standardkomponenten/sperrvermerk} \fi
+	
+%	Vorwort
+	\ifvorwort \include{./standardkomponenten/vorwort} \fi
+	
+%	Abstract
+	\include{./standardkomponenten/abstract}
+	
+%	Inhaltsverzeichnis
+	\tableofcontents
+	\ifgleichgeschlechtlichkeitsdisclaimer \input{./standardkomponenten/gleichgeschlechtlichkeitsdisclaimer} \fi
+	
+%	Abkürzungsverzeichnis
+	\ifabkuerzungsverzeichnis \include{./standardkomponenten/abkuerzungsverzeichnis} \fi
+	
+%	Abbildungsverzeichnis
+	\listoffigures
+	\cleardoublepage
+	
+%	Tabellenverzeichnis
+	\listoftables
+	\cleardoublepage
+	
+% 	Arabische Seitenzahlen
+	\pagenumbering{arabic}
+	
+%	Inhalt
+	\foreach \i in {00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, ...,99} {%
+		\edef\FileName{./kapitel/\i .tex}%     
+		\IfFileExists{\FileName}{%
+			\input{\FileName}%       
+		}
+	}
+
+%	Literaturverzeichnis
+%	bibliographystyle 	--> einer von [plain, abbrv, alpha, abstract, apa, unsrt]
+	\bibliographystyle{plain}
+%	bibliography 		--> Pfad zur Bibtex-Datei (ohne .bib am Ende)
+	\bibliography{./literatur/bibfile}
+	
+% 	Anhang
+	\include{./standardkomponenten/anhang}
+	\cleardoublepage
+
+%	Ehrenwörtliche Erklärung
+	\include{./standardkomponenten/ehrenwoertliche_erklaerung}
+	
+\end{document}
